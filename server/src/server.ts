@@ -13,17 +13,26 @@ const app = express()
 
 app.use(express.json())
 
-app.use(cors())
 
 app.use(express.static(path.join(__dirname, "public"))) // Serve static files
 
 const server = http.createServer(app)
+const allowedOrigin = "https://cocode-by-auri.onrender.com"
+
+app.use(cors({
+  origin: allowedOrigin,
+  methods: ["GET", "POST"],
+  credentials: true,
+}))
+
 const io = new Server(server, {
-	cors: {
-		origin: "*",
-	},
-	maxHttpBufferSize: 1e8,
-	pingTimeout: 60000,
+  cors: {
+    origin: allowedOrigin,
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+  maxHttpBufferSize: 1e8,
+  pingTimeout: 60000,
 })
 
 let userSocketMap: User[] = []
